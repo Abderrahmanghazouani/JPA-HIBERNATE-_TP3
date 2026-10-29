@@ -13,6 +13,13 @@ Java 17, Maven, JPA 2.2, Hibernate 5.6, H2, IntelliJ IDEA.
 4. Créer les entités `Utilisateur`, `Salle`, `Reservation`, `Equipement`.
 5. Lancer `App.java` et observer les requêtes SQL.
 
+## Explication du code
+- **Utilisateur** : `@OneToMany(cascade = ALL, orphanRemoval = true)` → enregistrer ou supprimer un utilisateur fait de même pour ses réservations ; une réservation retirée de sa liste est supprimée de la base.
+- **Reservation** : deux `@ManyToOne` (vers Utilisateur et Salle) ; c'est elle qui contient les clés étrangères `utilisateur_id` et `salle_id`.
+- **Salle** : `@ManyToMany` + `@JoinTable("salle_equipement")` vers Equipement, sans cascade REMOVE pour ne pas supprimer un équipement partagé.
+- **Equipement** : côté inverse du ManyToMany (`mappedBy = "equipements"`).
+- **App** : un seul `em.persist(user)` enregistre tout grâce aux cascades, puis on teste la suppression orpheline et la suppression d'un utilisateur.
+
 ## Lancer le projet
 Dans IntelliJ : ouvrir `App.java` puis cliquer sur ▶.
 
@@ -41,3 +48,6 @@ Les entités sont dans `model`, la configuration dans `META-INF/persistence.xml`
 ### 3. Salle ↔ Équipement (ManyToMany)
 ![screen3](images/screen3.png)
 La table de jointure `salle_equipement` relie les salles et les équipements.
+
+## Résumé
+Ce TP montre comment relier des entités JPA (OneToMany, ManyToOne, ManyToMany) et comment les cascades et `orphanRemoval` automatisent l'enregistrement et la suppression, tout en protégeant les données partagées comme les équipements.
