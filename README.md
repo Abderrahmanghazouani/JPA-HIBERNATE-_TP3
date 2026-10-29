@@ -32,28 +32,12 @@ git push
 
 ### 1. Structure du projet
 ![screen1](images/screen1.png)
-Les fichiers du projet Maven.
+Les entités sont dans `model`, la configuration dans `META-INF/persistence.xml`.
 
-### 2. Entité Utilisateur
+### 2. Utilisateur → Réservations (OneToMany)
 ![screen2](images/screen2.png)
-Un utilisateur a plusieurs réservations (cascade + suppression orpheline).
+`cascade = ALL` et `orphanRemoval = true` : les réservations suivent l'utilisateur.
 
-### 3. Entité Salle
+### 3. Salle ↔ Équipement (ManyToMany)
 ![screen3](images/screen3.png)
-Relation ManyToMany avec les équipements.
-
-### 4. Entité Reservation
-![screen4](images/screen4.png)
-Chaque réservation est liée à un utilisateur et à une salle.
-
-### 5. persistence.xml
-![screen5](images/screen5.png)
-Connexion à la base H2.
-
-### 6. Création des tables
-![screen6](images/screen6.png)
-Hibernate crée les tables automatiquement.
-
-### 7. Résultat
-![screen7](images/screen7.png)
-L'utilisateur et ses réservations sont supprimés, les salles et équipements restent.
+La table de jointure `salle_equipement` relie les salles et les équipements.
